@@ -8,13 +8,15 @@ typedef struct Player{
     int y;
 }Player;
 
-Player player = {15,32};
+Player p1 = {15,32};
+Player p2 = {15,33};
 
 void renderControls(){
-	printf("\033[29;1H");										//Position du curseur
+	printf("\033[27;1H");										//Position du curseur
 	printf ("\033[1;37;46m");									//Couleur du texte en cyan
 	printf("Controls:\n");
-	printf("Up : Z | Left : Q | Down : S | Right : D | Leave : X");
+	printf("Player 1 -> Up : Z | Left : Q | Down : S | Right : D | Leave : X\n");
+	printf("Player 2 -> Up : I | Left : J | Down : K | Right : L | Leave : X");
 	printf("\033[?25l");										//Cacher le curseur
 	printf("\033[0m");         									// <-- reset indispensable
     printf("\033[?25l");       									// cacher curseur	
@@ -25,7 +27,9 @@ void renderInfos(){
 	printf("\033[1;75H");										//Se mettre à la position x = 75 et y = 1	
 	printf(">>>> Information Debug <<<<\n");
 	printf("\033[2;75H");										//Position du curseur
-	printf("Player position : %2d; %2d", player.y, player.x);	//Dire les coordonnées du player
+	printf("Player 1 position : %2d; %2d", p1.y, p1.x);			//Dire les coordonnées du p1
+	printf("\033[3;75H");
+	printf("Player 2 position : %2d; %2d", p2.y, p2.x);
 	printf("\033[0m"); 	
 }
 
@@ -33,31 +37,56 @@ void renderPlayer(){
 	if(_kbhit() == 1){
 		char touch = getch();
 		switch(touch){
+			//Player 1
 			case 'z':
-				if(player.x > 4) player.x --;
+				if(p1.x > 4) p1.x --;
 				break;
 			case 'q':
-				if(player.y > 2) player.y--;
+				if(p1.y > 2) p1.y--;
 				break;
 			case 's':
-				if(player.x < 24) player.x ++;
+				if(p1.x < 24) p1.x ++;
 				break;
 			case 'd':
-				if(player.y < 64) player.y++;
+				if(p1.y < 64) p1.y++;
 				break;
+				
+			//Player 2
+			case 'i':
+				if(p2.x > 4) p2.x --;
+				break;
+			case 'j':
+				if(p2.y > 2) p2.y--;
+				break;
+			case 'k':
+				if(p2.x < 24) p2.x ++;
+				break;
+			case 'l':
+				if(p2.y < 64) p2.y++;
+				break;
+				
 			case 'x':
 				system("cls");
 				exit(0);
 				break;
 		}		
 	}
-	printf("\033[%d;%dH", player.x, player.y);
+	printf("\033[%d;%dH", p1.x, p1.y);
 	printf("\033[1;35m");
 	printf("@");
-	Sleep(100);
+	Sleep(75);
 	printf("\b");
 	printf(" \b");
-	Sleep(100);
+	Sleep(75);
+	
+	printf("\033[%d;%dH", p2.x, p2.y);
+	printf("\033[1;35m");
+	printf("$");
+	Sleep(75);
+	printf("\b");
+	printf(" \b");
+	Sleep(75);
+	
 }
 
 int main(){
@@ -78,8 +107,7 @@ int main(){
 	while(1){
 		renderPlayer();				//Affiche le sprite à la bonne position		
 		renderControls();			//Affichage des touches
-		renderInfos();		 		//Affichage du debug du perso	
- 					 		
+		renderInfos();		 		//Affichage du debug du perso
 	}
     return 0;
 }
